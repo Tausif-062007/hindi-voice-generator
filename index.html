@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hindi Voice Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080c14;--card:#0f1520;--border:#1e2d45;--accent:#00aaff;--accent2:#ff4466;--gold:#ffcc00;--text:#dce8f8;--muted:#4a6080;--success:#00cc88}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;padding:32px 16px;display:flex;flex-direction:column;align-items:center}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,170,255,0.05) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(255,68,102,0.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+.wrap{width:100%;max-width:760px;position:relative;z-index:1}
+.header{text-align:center;margin-bottom:36px}
+.logo{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:36px;font-weight:700;letter-spacing:2px}
+.tagline{color:var(--muted);font-size:13px;letter-spacing:3px;margin-top:6px;text-transform:uppercase}
+.hindi-title{font-family:'Noto Sans Devanagari',sans-serif;font-size:18px;color:var(--gold);margin-top:8px}
+.tabs{display:flex;border-bottom:2px solid var(--border)}
+.tab{padding:12px 28px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;background:transparent;border:none;color:var(--muted);cursor:pointer;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--text)}
+.card{background:var(--card);border:1px solid var(--border);padding:28px;margin-top:0}
+.section-label{font-size:11px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:10px}
+textarea{width:100%;min-height:155px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans Devanagari',sans-serif;font-size:17px;line-height:1.8;padding:14px;resize:vertical;outline:none;transition:border-color 0.2s}
+textarea:focus{border-color:var(--accent)}
+textarea::placeholder{color:var(--muted);font-size:15px}
+.char-row{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--muted)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.ctrl{display:flex;flex-direction:column;gap:6px}
+.ctrl label{font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;cursor:pointer;transition:border-color 0.2s;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6080' fill='none' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select:hover,select:focus{border-color:var(--accent)}
+.range-row{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;height:3px;accent-color:var(--accent);cursor:pointer;border:none;outline:none}
+.rval{font-size:12px;color:var(--gold);min-width:32px;text-align:right}
+.expr-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.expr-pill{padding:6px 14px;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-family:'Rajdhani',sans-serif;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.expr-pill:hover{border-color:var(--accent);color:var(--accent)}
+.expr-pill.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.expr-pill.angry.active{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.expr-pill.sad.active{background:#8844ff;border-color:#8844ff;color:#fff}
+.expr-pill.fearful.active{background:var(--gold);border-color:var(--gold);color:#000}
+.btn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:24px}
+button.play{background:linear-gradient(135deg,var(--accent),#0066cc);color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;padding:14px;border:none;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+button.play:hover{opacity:0.85;transform:translateY(-1px)}
+button.stop{background:transparent;color:var(--text);border:1px solid var(--border);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;padding:14px;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
+button.stop:hover{border-color:var(--accent2);color:var(--accent2)}
+button.dl{background:var(--success);color:#000;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;padding:14px;border:none;cursor:pointer;text-transform:uppercase;transition:all 0.2s;opacity:0.35;pointer-events:none}
+button.dl.on{opacity:1;pointer-events:all}
+button.dl.on:hover{background:#00ffaa;transform:translateY(-1px)}
+.status{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);padding:12px 16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background 0.3s}
+.dot.go{background:var(--accent);animation:blink 1s infinite}
+.dot.ok{background:var(--success)}
+.dot.err{background:var(--accent2)}
+.pbar{height:2px;background:var(--border);margin-top:8px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width 0.4s}
+.tip{border-left:3px solid var(--gold);background:rgba(255,204,0,0.04);padding:12px 16px;margin-top:14px;font-size:12px;color:var(--muted);line-height:1.7}
+.tip b{color:var(--gold)}
+.panel{display:none}
+.panel.active{display:block}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@media(max-width:520px){.controls{grid-template-columns:1fr}.btn-row{grid-template-columns:1fr 1fr}button.dl{grid-column:span 2}.logo{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">🎙 VOICE STUDIO</div>
+    <div class="hindi-title">हिंदी वॉइस जनरेटर</div>
+    <div class="tagline">Microsoft &amp; Google · Free · MP3 Download</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('ms',this)">🔵 Microsoft</button>
+    <button class="tab" onclick="switchTab('google',this)">🔴 Google</button>
+  </div>
+  <div class="card panel active" id="ms">
+    <div class="section-label">// Microsoft Neural TTS</div>
+    <textarea id="msText" placeholder="यहाँ हिंदी में लिखें...&#10;उदाहरण: रात के अंधेरे में एक पुरानी हवेली थी..."></textarea>
+    <div class="char-row"><span>Hindi (Devanagari) best results deta hai</span><span id="msCount">0 chars</span></div>
+    <div class="controls">
+      <div class="ctrl"><label>Voice</label>
+        <select id="msVoice"><option value="madhur">Madhur (Male — Deep)</option><option value="swara">Swara (Female)</option></select>
+      </div>
+      <div class="ctrl"><label>Speed</label>
+        <div class="range-row"><input type="range" id="msSpeed" min="0.5" max="2" step="0.1" value="0.9" oninput="document.getElementById('msSpeedVal').textContent=parseFloat(this.value).toFixed(1)+'x'"><span class="rval" id="msSpeedVal">0.9x</span></div>
+      </div>
+      <div class="ctrl"><label>Pitch</label>
+        <div class="range-row"><input type="range" id="msPitch" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('msPitchVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="msPitchVal">1.0</span></div>
+      </div>
+      <div class="ctrl"><label>Volume</label>
+        <div class="range-row"><input type="range" id="msVol" min="0.1" max="1" step="0.1" value="1" oninput="document.getElementById('msVolVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="msVolVal">1.0</span></div>
+      </div>
+    </div>
+    <div class="section-label" style="margin-top:18px">// Expression Style</div>
+    <div class="expr-row">
+      <button class="expr-pill active" onclick="setExpr(this,'normal')">😐 Normal</button>
+      <button class="expr-pill angry" onclick="setExpr(this,'angry')">😠 Angry</button>
+      <button class="expr-pill sad" onclick="setExpr(this,'sad')">😢 Sad</button>
+      <button class="expr-pill fearful" onclick="setExpr(this,'fearful')">😨 Fearful</button>
+    </div>
+    <div class="btn-row">
+      <button class="play" onclick="msPlay()">▶ PLAY</button>
+      <button class="stop" onclick="msStop()">■ STOP</button>
+      <button class="dl" id="msDl" onclick="msDlAudio()">⬇ MP3</button>
+    </div>
+    <div class="status"><div class="dot" id="msDot"></div><span id="msStat">Ready — text likhein aur Play dabayein</span></div>
+    <div class="pbar"><div class="pfill" id="msBar"></div></div>
+    <div class="tip"><b>TIP:</b> Pehle Play karein — mic permission allow karein — phir MP3 Download karein!</div>
+  </div>
+  <div class="card panel" id="google">
+    <div class="section-label">// Google Translate TTS — Direct MP3</div>
+    <textarea id="gText" placeholder="यहाँ हिंदी में लिखें...&#10;उदाहरण: एक अंधेरी रात में..."></textarea>
+    <div class="char-row"><span>200 characters per chunk limit</span><span id="gCount">0 chars</span></div>
+    <div class="controls">
+      <div class="ctrl"><label>Speed</label>
+        <div class="range-row"><input type="range" id="gSpeed" min="0.3" max="1" step="0.1" value="0.8" oninput="document.getElementById('gSpeedVal').textContent=parseFloat(this.value).toFixed(1)+'x'"><span class="rval" id="gSpeedVal">0.8x</span></div>
+      </div>
+      <div class="ctrl"><label>Language</label>
+        <select id="gLang"><option value="hi">Hindi (हिंदी)</option><option value="en">English</option><option value="mr">Marathi</option><option value="ur">Urdu</option></select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="play" onclick="gPlay()">▶ PLAY</button>
+      <button class="stop" onclick="gStop()">■ STOP</button>
+      <button class="dl on" onclick="gDownload()">⬇ MP3</button>
+    </div>
+    <div class="status"><div class="dot" id="gDot"></div><span id="gStat">Ready — Google TTS direct MP3 deta hai!</span></div>
+    <div class="pbar"><div class="pfill" id="gBar"></div></div>
+    <div class="tip"><b>Google TTS:</b> Direct MP3 download hoti hai! Play ki zaroorat nahi.<br><b>Lamba text:</b> 200 chars mein likho best results ke liye.</div>
+  </div>
+</div>
+<script>
+function switchTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active')}
+let currentExpr='normal';
+function setExpr(btn,expr){document.querySelectorAll('.expr-pill').forEach(p=>p.classList.remove('active'));btn.classList.add('active');currentExpr=expr}
+document.getElementById('msText').addEventListener('input',function(){document.getElementById('msCount').textContent=this.value.length+' chars'});
+document.getElementById('gText').addEventListener('input',function(){document.getElementById('gCount').textContent=this.value.length+' chars'});
+let msVoices=[];
+window.speechSynthesis.onvoiceschanged=()=>{msVoices=window.speechSynthesis.getVoices()};
+msVoices=window.speechSynthesis.getVoices();
+let msRecorder,msChunks=[],msBlob=null;
+function msStat(t,type){document.getElementById('msStat').textContent=t;document.getElementById('msDot').className='dot'+(type?' '+type:'')}
+function msProgress(p){document.getElementById('msBar').style.width=p+'%'}
+function msPlay(){
+  const text=document.getElementById('msText').value.trim();
+  if(!text){msStat('Pehle text likhein!','err');return}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const vp=document.getElementById('msVoice').value;
+  let v=vp==='madhur'?msVoices.find(x=>x.name.toLowerCase().includes('madhur')):msVoices.find(x=>x.name.toLowerCase().includes('swara'));
+  if(!v)v=msVoices.find(x=>x.lang==='hi-IN')||msVoices.find(x=>x.lang.startsWith('hi'));
+  if(v)u.voice=v;
+  u.lang='hi-IN';
+  u.rate=parseFloat(document.getElementById('msSpeed').value);
+  u.pitch=parseFloat(document.getElementById('msPitch').value);
+  u.volume=parseFloat(document.getElementById('msVol').value);
+  if(currentExpr==='angry'){u.rate=Math.min(u.rate*1.2,2);u.pitch=Math.max(u.pitch*0.8,0.5)}
+  else if(currentExpr==='sad'){u.rate=Math.max(u.rate*0.8,0.5);u.pitch=Math.max(u.pitch*0.85,0.5)}
+  else if(currentExpr==='fearful'){u.rate=Math.min(u.rate*1.1,2);u.pitch=Math.min(u.pitch*1.15,2)}
+  tryRecord();
+  u.onstart=()=>{msStat('Bol raha hai...','go');msProgress(40)};
+  u.onend=()=>{msStat('Done! Download active hai.','ok');msProgress(100);setTimeout(()=>msProgress(0),1500);document.getElementById('msDl').classList.add('on');stopRecord()};
+  u.onerror=e=>{msStat('Error: '+e.error,'err');msProgress(0);stopRecord()};
+  window.speechSynthesis.speak(u)
+}
+function msStop(){window.speechSynthesis.cancel();msStat('Stopped','');msProgress(0);stopRecord()}
+function tryRecord(){
+  msChunks=[];msBlob=null;
+  try{navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{msRecorder=new MediaRecorder(stream);msRecorder.ondataavailable=e=>{if(e.data.size>0)msChunks.push(e.data)};msRecorder.onstop=()=>{msBlob=new Blob(msChunks,{type:'audio/webm'})};msRecorder.start()}).catch(()=>{msBlob=null})}catch(e){msBlob=null}
+}
+function stopRecord(){try{if(msRecorder&&msRecorder.state!=='inactive')msRecorder.stop()}catch(e){}}
+function msDlAudio(){
+  if(msBlob){const url=URL.createObjectURL(msBlob);const a=document.createElement('a');a.href=url;a.download='hindi_voice_'+Date.now()+'.webm';a.click();URL.revokeObjectURL(url);msStat('Audio download ho gayi!','ok')}
+  else{const text=document.getElementById('msText').value;const b=new Blob([text],{type:'text/plain'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='script.txt';a.click();URL.revokeObjectURL(url);msStat('Script download hui. Mic allow karo audio ke liye.','ok')}
+}
+let gAudio=null;
+function gStat(t,type){document.getElementById('gStat').textContent=t;document.getElementById('gDot').className='dot'+(type?' '+type:'')}
+function gProgress(p){document.getElementById('gBar').style.width=p+'%'}
+function buildGURL(text,lang,speed){return'https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURIComponent(text.substring(0,200))+'&tl='+lang+'&slow='+(speed<0.6?'true':'false')+'&client=tw-ob'}
+function gPlay(){
+  const text=document.getElementById('gText').value.trim();
+  if(!text){gStat('Pehle text likhein!','err');return}
+  if(gAudio){gAudio.pause();gAudio=null}
+  const url=buildGURL(text,document.getElementById('gLang').value,parseFloat(document.getElementById('gSpeed').value));
+  gAudio=new Audio(url);
+  gAudio.onplay=()=>{gStat('Google TTS bol raha hai...','go');gProgress(50)};
+  gAudio.onended=()=>{gStat('Done!','ok');gProgress(100);setTimeout(()=>gProgress(0),1500)};
+  gAudio.onerror=()=>{gStat('Error — text 200 chars se kam rakho.','err');gProgress(0)};
+  gAudio.play()
+}
+function gStop(){if(gAudio){gAudio.pause();gAudio=null}gStat('Stopped','');gProgress(0)}
+function gDownload(){
+  const text=document.getElementById('gText').value.trim();
+  if(!text){gStat('Pehle text likhein!','err');return}
+  const url=buildGURL(text,document.getElementById('gLang').value,parseFloat(document.getElementById('gSpeed').value));
+  gStat('Downloading...','go');gProgress(60);
+  fetch(url).then(r=>r.blob()).then(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='google_hindi_'+Date.now()+'.mp3';a.click();gStat('MP3 download ho gayi!','ok');gProgress(100);setTimeout(()=>gProgress(0),1500)}).catch(()=>{const a=document.createElement('a');a.href=url;a.download='hindi_audio.mp3';a.target='_blank';a.click();gStat('Download shuru ho gayi!','ok');gProgress(100)})
+}
+</script>
+</body>
+</html>
