@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hindi Voice Studio</title>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -16,13 +15,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .logo{font-size:36px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hindi{font-family:'Noto Sans Devanagari',sans-serif;font-size:17px;color:var(--gold);margin-top:6px}
 .sub{color:var(--muted);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-top:4px}
-.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:0}
-.tab{padding:12px 28px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;background:transparent;border:none;color:var(--muted);cursor:pointer;text-transform:uppercase;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-2px}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab:hover{color:var(--text)}
-.panel{display:none}
-.panel.active{display:block}
-.card{background:var(--card);border:1px solid var(--border);border-top:none;padding:26px}
+.card{background:var(--card);border:1px solid var(--border);padding:26px;border-radius:2px}
 .lbl{font-size:11px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
 textarea{width:100%;min-height:145px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans Devanagari',sans-serif;font-size:16px;line-height:1.9;padding:14px;resize:vertical;outline:none;transition:border-color 0.2s;border-radius:2px}
 textarea:focus{border-color:var(--accent)}
@@ -54,8 +47,11 @@ input[type=range]{flex:1;height:3px;accent-color:var(--accent);cursor:pointer;bo
 .pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width 0.4s}
 .tip{border-left:3px solid var(--gold);background:rgba(255,201,74,0.05);padding:11px 15px;margin-top:14px;font-size:12px;color:var(--muted);line-height:1.8}
 .tip b{color:var(--gold)}
+.voice-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;margin-left:6px}
+.f-badge{background:rgba(255,62,108,0.2);color:#ff6b8a}
+.m-badge{background:rgba(0,200,255,0.2);color:#00c8ff}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-@media(max-width:500px){.grid{grid-template-columns:1fr}.btn-row{grid-template-columns:1fr 1fr}.btn-dl{grid-column:span 2}.logo{font-size:26px}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.btn-row{grid-template-columns:1fr 1fr}.btn-dl{grid-column:span 2}}
 </style>
 </head>
 <body>
@@ -63,224 +59,259 @@ input[type=range]{flex:1;height:3px;accent-color:var(--accent);cursor:pointer;bo
   <div class="header">
     <div class="logo">🎙 VOICE STUDIO</div>
     <div class="hindi">हिंदी वॉइस जनरेटर</div>
-    <div class="sub">Free · Male &amp; Female · MP3 Download</div>
+    <div class="sub">Free · 10+ Voices · MP3 Download</div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('rv',this)">🟢 ResponsiveVoice</button>
-    <button class="tab" onclick="switchTab('ms',this)">🔵 Microsoft</button>
-  </div>
-
-  <!-- RESPONSIVEVOICE TAB -->
-  <div class="panel active" id="rv">
-    <div class="card">
-      <div class="lbl">// Text Likhein</div>
-      <textarea id="rvText" placeholder="यहाँ हिंदी में लिखें...&#10;उदाहरण: रात के अंधेरे में एक पुरानी हवेली थी..."></textarea>
-      <div class="char-row"><span>Male + Female dono available</span><span id="rvCount">0 chars</span></div>
-      <div class="grid">
-        <div class="ctrl"><label>Voice</label>
-          <select id="rvVoice">
-            <option value="Hindi Female">👩 Hindi Female</option>
-            <option value="Hindi Male">👨 Hindi Male</option>
-          </select>
-        </div>
-        <div class="ctrl"><label>Speed</label>
-          <div class="range-row"><input type="range" id="rvSpeed" min="0.3" max="1.5" step="0.1" value="0.9" oninput="document.getElementById('rvSpeedVal').textContent=parseFloat(this.value).toFixed(1)+'x'"><span class="rval" id="rvSpeedVal">0.9x</span></div>
-        </div>
-        <div class="ctrl"><label>Pitch</label>
-          <div class="range-row"><input type="range" id="rvPitch" min="0.1" max="2" step="0.1" value="1" oninput="document.getElementById('rvPitchVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="rvPitchVal">1.0</span></div>
-        </div>
-        <div class="ctrl"><label>Volume</label>
-          <div class="range-row"><input type="range" id="rvVol" min="0.1" max="1" step="0.1" value="1" oninput="document.getElementById('rvVolVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="rvVolVal">1.0</span></div>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-play" onclick="rvPlay()">▶ PLAY</button>
-        <button class="btn btn-stop" onclick="rvStop()">■ STOP</button>
-        <button class="btn btn-dl" id="rvDl" onclick="rvDownload()">⬇ MP3</button>
-      </div>
-      <div class="status"><div class="dot" id="rvDot"></div><span id="rvStat">Ready — text likhein aur Play dabayein</span></div>
-      <div class="pbar"><div class="pfill" id="rvBar"></div></div>
-      <div class="tip"><b>TIP:</b> Play dabao → mic permission allow karo → phir MP3 download karo!<br><b>Best:</b> Hindi (Devanagari) mein likhein — जैसे: रात के अंधेरे में...</div>
+  <div class="card">
+    <div class="lbl">// Text Likhein</div>
+    <textarea id="txt" placeholder="यहाँ हिंदी में लिखें...&#10;उदाहरण: रात के अंधेरे में एक पुरानी हवेली थी..."></textarea>
+    <div class="char-row">
+      <span id="voiceInfo">Voices load ho rahi hain...</span>
+      <span id="charCount">0 chars</span>
     </div>
-  </div>
 
-  <!-- MICROSOFT TAB -->
-  <div class="panel" id="ms">
-    <div class="card">
-      <div class="lbl">// Text Likhein</div>
-      <textarea id="msText" placeholder="यहाँ हिंदी में लिखें...&#10;उदाहरण: एक अंधेरी रात में..."></textarea>
-      <div class="char-row"><span>Windows Hindi voice use hoti hai</span><span id="msCount">0 chars</span></div>
-      <div class="grid">
-        <div class="ctrl"><label>Voice</label>
-          <select id="msVoice">
-            <option value="male">👨 Male (Madhur)</option>
-            <option value="female">👩 Female (Swara)</option>
-          </select>
-        </div>
-        <div class="ctrl"><label>Speed</label>
-          <div class="range-row"><input type="range" id="msSpeed" min="0.5" max="2" step="0.1" value="0.9" oninput="document.getElementById('msSpeedVal').textContent=parseFloat(this.value).toFixed(1)+'x'"><span class="rval" id="msSpeedVal">0.9x</span></div>
-        </div>
-        <div class="ctrl"><label>Pitch</label>
-          <div class="range-row"><input type="range" id="msPitch" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('msPitchVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="msPitchVal">1.0</span></div>
-        </div>
-        <div class="ctrl"><label>Volume</label>
-          <div class="range-row"><input type="range" id="msVol" min="0.1" max="1" step="0.1" value="1" oninput="document.getElementById('msVolVal').textContent=parseFloat(this.value).toFixed(1)"><span class="rval" id="msVolVal">1.0</span></div>
+    <div class="grid">
+      <div class="ctrl">
+        <label>Voice Select Karein</label>
+        <select id="voiceSelect">
+          <option value="">-- Loading voices... --</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Speed</label>
+        <div class="range-row">
+          <input type="range" id="speed" min="0.3" max="1.5" step="0.1" value="0.9"
+            oninput="document.getElementById('speedVal').textContent=parseFloat(this.value).toFixed(1)+'x'">
+          <span class="rval" id="speedVal">0.9x</span>
         </div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-play" onclick="msPlay()">▶ PLAY</button>
-        <button class="btn btn-stop" onclick="msStop()">■ STOP</button>
-        <button class="btn btn-dl" id="msDl" onclick="msDl()">⬇ MP3</button>
+      <div class="ctrl">
+        <label>Pitch</label>
+        <div class="range-row">
+          <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1"
+            oninput="document.getElementById('pitchVal').textContent=parseFloat(this.value).toFixed(1)">
+          <span class="rval" id="pitchVal">1.0</span>
+        </div>
       </div>
-      <div class="status"><div class="dot" id="msDot"></div><span id="msStat">Ready — text likhein aur Play dabayein</span></div>
-      <div class="pbar"><div class="pfill" id="msBar"></div></div>
-      <div class="tip"><b>TIP:</b> Mic allow karo — Play karo — phir MP3 download karo!<br><b>Female voice:</b> Windows mein Microsoft Swara install honi chahiye.</div>
+      <div class="ctrl">
+        <label>Volume</label>
+        <div class="range-row">
+          <input type="range" id="vol" min="0.1" max="1" step="0.1" value="1"
+            oninput="document.getElementById('volVal').textContent=parseFloat(this.value).toFixed(1)">
+          <span class="rval" id="volVal">1.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-play" onclick="playVoice()">▶ PLAY</button>
+      <button class="btn btn-stop" onclick="stopVoice()">■ STOP</button>
+      <button class="btn btn-dl" id="dlBtn" onclick="downloadAudio()">⬇ MP3</button>
+    </div>
+
+    <div class="status">
+      <div class="dot" id="dot"></div>
+      <span id="statusMsg">Ready — text likhein aur Play dabayein</span>
+    </div>
+    <div class="pbar"><div class="pfill" id="pbar"></div></div>
+
+    <div class="tip">
+      <b>TIP:</b> Play dabao → mic permission <b>Allow</b> karo → awaaz sunai de → MP3 download karo!<br>
+      <b>Female voices:</b> आरव, अन्या, आरती, काव्या &nbsp;|&nbsp; <b>Male voices:</b> अर्जुन, कुनाल, मधुर, हेमंत
     </div>
   </div>
 </div>
 
 <script>
-// Tab switch
-function switchTab(id,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
+// --- Char counter ---
+document.getElementById('txt').addEventListener('input', function(){
+  document.getElementById('charCount').textContent = this.value.length + ' chars';
+});
+
+// --- Status ---
+function setStat(msg, type){
+  document.getElementById('statusMsg').textContent = msg;
+  document.getElementById('dot').className = 'dot' + (type ? ' '+type : '');
+}
+function setBar(p){ document.getElementById('pbar').style.width = p+'%'; }
+
+// --- Load all Hindi voices into dropdown ---
+let allVoices = [];
+
+// Known female Hindi voice name fragments
+const femaleKeywords = ['kalpana','swara','aarав','आरव','ananya','अन्या','aarti','आरती','kavya','काव्या','rehan','रेहान'];
+
+function isFemaleName(name){
+  const n = name.toLowerCase();
+  // Check known female names in Hindi TTS
+  const femaleNames = ['kalpana','swara','aarav','aarав','आरव','ananya','अन्या','aarti','आरती','kavya','काव्या','female','neerja','sonia','aria','ava','zira'];
+  return femaleNames.some(f => n.includes(f));
 }
 
-// Char counters
-document.getElementById('rvText').addEventListener('input',function(){document.getElementById('rvCount').textContent=this.value.length+' chars'});
-document.getElementById('msText').addEventListener('input',function(){document.getElementById('msCount').textContent=this.value.length+' chars'});
+function getGenderLabel(voice){
+  const n = voice.name.toLowerCase();
+  // Microsoft online voices - known genders
+  if(n.includes('आरव') || n.includes('aarav')) return '👩 Female';
+  if(n.includes('अन्या') || n.includes('ananya')) return '👩 Female';
+  if(n.includes('आरती') || n.includes('aarti')) return '👩 Female';
+  if(n.includes('काव्या') || n.includes('kavya')) return '👩 Female';
+  if(n.includes('रेहान') || n.includes('rehan')) return '👩 Female';
+  if(n.includes('kalpana')) return '👩 Female';
+  if(n.includes('swara')) return '👩 Female';
+  if(n.includes('अर्जुन') || n.includes('arjun')) return '👨 Male';
+  if(n.includes('कुनाल') || n.includes('kunal')) return '👨 Male';
+  if(n.includes('मधुर') || n.includes('madhur')) return '👨 Male';
+  if(n.includes('खरा') || n.includes('khara') || n.includes('khar')) return '👨 Male';
+  if(n.includes('हेमंत') || n.includes('hemant')) return '👨 Male';
+  if(n.includes('prabhat')) return '👨 Male';
+  return '🎙';
+}
 
-// Status helpers
-function setStat(id,msg,type){document.getElementById(id+'Stat').textContent=msg;document.getElementById(id+'Dot').className='dot'+(type?' '+type:'')}
-function setBar(id,p){document.getElementById(id+'Bar').style.width=p+'%'}
+function loadVoices(){
+  const voices = window.speechSynthesis.getVoices();
+  // Filter Hindi voices
+  let hindiVoices = voices.filter(v => v.lang === 'hi-IN' || v.lang.startsWith('hi'));
+  
+  if(hindiVoices.length === 0){
+    document.getElementById('voiceInfo').textContent = 'Hindi voices load ho rahi hain — dobara try karo';
+    return;
+  }
 
-// ============ RESPONSIVEVOICE ============
-let rvRecorder=null,rvChunks=[],rvBlob=null;
+  allVoices = hindiVoices;
+  const sel = document.getElementById('voiceSelect');
+  sel.innerHTML = '';
 
-function rvPlay(){
-  const text=document.getElementById('rvText').value.trim();
-  if(!text){setStat('rv','Pehle text likhein!','err');return}
-  if(typeof responsiveVoice==='undefined'){setStat('rv','Library load nahi hui — internet check karo!','err');return}
-  responsiveVoice.cancel();
-  rvChunks=[];rvBlob=null;
-  document.getElementById('rvDl').classList.remove('on');
-  const voice=document.getElementById('rvVoice').value;
-  const rate=parseFloat(document.getElementById('rvSpeed').value);
-  const pitch=parseFloat(document.getElementById('rvPitch').value);
-  const vol=parseFloat(document.getElementById('rvVol').value);
-  setStat('rv','Bol raha hai...','go');setBar('rv',30);
-  rvStartRecord();
-  responsiveVoice.speak(text,voice,{
-    rate:rate,pitch:pitch,volume:vol,
-    onstart:()=>{setStat('rv','Bol raha hai...','go');setBar('rv',60)},
-    onend:()=>{setStat('rv','Done! MP3 download ke liye taiyar ✓','ok');setBar('rv',100);setTimeout(()=>setBar('rv',0),1500);rvStopRecord()},
-    onerror:()=>{setStat('rv','Error — dobara try karo','err');setBar('rv',0);rvStopRecord()}
+  // Sort: females first, then males
+  const females = hindiVoices.filter(v => {
+    const g = getGenderLabel(v);
+    return g.includes('Female');
+  });
+  const males = hindiVoices.filter(v => {
+    const g = getGenderLabel(v);
+    return !g.includes('Female');
+  });
+
+  // Add female group
+  if(females.length > 0){
+    const fg = document.createElement('optgroup');
+    fg.label = '👩 Female Voices';
+    females.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = getGenderLabel(v) + ' — ' + v.name.replace('Microsoft ','').replace(' Online (Natural)','').replace(' - Hindi (India)','');
+      fg.appendChild(opt);
+    });
+    sel.appendChild(fg);
+  }
+
+  // Add male group
+  if(males.length > 0){
+    const mg = document.createElement('optgroup');
+    mg.label = '👨 Male Voices';
+    males.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = getGenderLabel(v) + ' — ' + v.name.replace('Microsoft ','').replace(' Online (Natural)','').replace(' - Hindi (India)','');
+      mg.appendChild(opt);
+    });
+    sel.appendChild(mg);
+  }
+
+  document.getElementById('voiceInfo').textContent = '✓ ' + hindiVoices.length + ' Hindi voices available!';
+  setStat('Ready — voice chunein aur Play dabayein', '');
+}
+
+// Load voices on page load
+window.speechSynthesis.onvoiceschanged = loadVoices;
+setTimeout(loadVoices, 500);
+setTimeout(loadVoices, 1500);
+
+// --- Recording ---
+let recorder = null, chunks = [], blob = null;
+
+function startRecord(){
+  chunks = []; blob = null;
+  if(!navigator.mediaDevices) return;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = e => { if(e.data && e.data.size > 0) chunks.push(e.data); };
+    recorder.onstop = () => {
+      blob = new Blob(chunks, {type:'audio/webm'});
+      document.getElementById('dlBtn').classList.add('on');
+      stream.getTracks().forEach(t => t.stop());
+    };
+    recorder.start();
+  }).catch(() => {
+    document.getElementById('dlBtn').classList.add('on');
   });
 }
 
-function rvStop(){
-  if(typeof responsiveVoice!=='undefined')responsiveVoice.cancel();
-  setStat('rv','Stopped','');setBar('rv',0);rvStopRecord();
+function stopRecord(){
+  try{ if(recorder && recorder.state !== 'inactive') recorder.stop(); }catch(e){}
 }
 
-function rvStartRecord(){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return;
-  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-    rvRecorder=new MediaRecorder(stream);
-    rvRecorder.ondataavailable=e=>{if(e.data&&e.data.size>0)rvChunks.push(e.data)};
-    rvRecorder.onstop=()=>{
-      rvBlob=new Blob(rvChunks,{type:'audio/webm'});
-      document.getElementById('rvDl').classList.add('on');
-      stream.getTracks().forEach(t=>t.stop());
-    };
-    rvRecorder.start();
-  }).catch(()=>{document.getElementById('rvDl').classList.add('on')});
-}
+// --- Play ---
+function playVoice(){
+  const text = document.getElementById('txt').value.trim();
+  if(!text){ setStat('Pehle text likhein!', 'err'); return; }
 
-function rvStopRecord(){
-  try{if(rvRecorder&&rvRecorder.state!=='inactive')rvRecorder.stop()}catch(e){}
-}
+  const voiceName = document.getElementById('voiceSelect').value;
+  if(!voiceName){ setStat('Pehle voice select karein!', 'err'); return; }
 
-function rvDownload(){
-  if(rvBlob){
-    const url=URL.createObjectURL(rvBlob);
-    const a=document.createElement('a');a.href=url;a.download='hindi_voice_'+Date.now()+'.webm';a.click();
-    URL.revokeObjectURL(url);setStat('rv','Audio download ho gayi! ✓','ok');
-  } else {
-    setStat('rv','Pehle Play karo aur mic allow karo!','err');
-  }
-}
-
-// ============ MICROSOFT (Web Speech API) ============
-let msRecorder=null,msChunks=[],msBlob=null;
-let msVoices=[];
-window.speechSynthesis.onvoiceschanged=()=>{msVoices=window.speechSynthesis.getVoices()};
-setTimeout(()=>{msVoices=window.speechSynthesis.getVoices()},500);
-
-function msPlay(){
-  const text=document.getElementById('msText').value.trim();
-  if(!text){setStat('ms','Pehle text likhein!','err');return}
   window.speechSynthesis.cancel();
-  msChunks=[];msBlob=null;
-  document.getElementById('msDl').classList.remove('on');
-  const u=new SpeechSynthesisUtterance(text);
-  const vp=document.getElementById('msVoice').value;
-  let v=null;
-  if(vp==='female'){
-    v=msVoices.find(x=>x.name.toLowerCase().includes('swara'))||
-      msVoices.find(x=>x.lang==='hi-IN'&&x.name.toLowerCase().includes('female'))||
-      msVoices.find(x=>x.lang==='hi-IN');
-  } else {
-    v=msVoices.find(x=>x.name.toLowerCase().includes('madhur'))||
-      msVoices.find(x=>x.lang==='hi-IN'&&x.name.toLowerCase().includes('male'))||
-      msVoices.find(x=>x.lang==='hi-IN');
-  }
-  if(v)u.voice=v;
-  u.lang='hi-IN';
-  u.rate=parseFloat(document.getElementById('msSpeed').value);
-  u.pitch=parseFloat(document.getElementById('msPitch').value);
-  u.volume=parseFloat(document.getElementById('msVol').value);
-  msStartRecord();
-  setStat('ms','Bol raha hai...','go');setBar('ms',30);
-  u.onstart=()=>{setStat('ms','Bol raha hai...','go');setBar('ms',60)};
-  u.onend=()=>{setStat('ms','Done! MP3 download ke liye taiyar ✓','ok');setBar('ms',100);setTimeout(()=>setBar('ms',0),1500);msStopRecord()};
-  u.onerror=e=>{setStat('ms','Error: '+e.error,'err');setBar('ms',0);msStopRecord()};
+  document.getElementById('dlBtn').classList.remove('on');
+  blob = null;
+
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  const selectedVoice = voices.find(v => v.name === voiceName);
+  if(selectedVoice) u.voice = selectedVoice;
+
+  u.lang = 'hi-IN';
+  u.rate = parseFloat(document.getElementById('speed').value);
+  u.pitch = parseFloat(document.getElementById('pitch').value);
+  u.volume = parseFloat(document.getElementById('vol').value);
+
+  startRecord();
+  setStat('Bol raha hai...', 'go');
+  setBar(30);
+
+  u.onstart = () => { setStat('Bol raha hai...', 'go'); setBar(60); };
+  u.onend = () => {
+    setStat('Done! MP3 download ke liye taiyar ✓', 'ok');
+    setBar(100);
+    setTimeout(() => setBar(0), 1500);
+    stopRecord();
+  };
+  u.onerror = e => {
+    setStat('Error: ' + e.error + ' — dobara try karo', 'err');
+    setBar(0);
+    stopRecord();
+  };
+
   window.speechSynthesis.speak(u);
 }
 
-function msStop(){
+// --- Stop ---
+function stopVoice(){
   window.speechSynthesis.cancel();
-  setStat('ms','Stopped','');setBar('ms',0);msStopRecord();
+  setStat('Stopped', '');
+  setBar(0);
+  stopRecord();
 }
 
-function msStartRecord(){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return;
-  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-    msRecorder=new MediaRecorder(stream);
-    msRecorder.ondataavailable=e=>{if(e.data&&e.data.size>0)msChunks.push(e.data)};
-    msRecorder.onstop=()=>{
-      msBlob=new Blob(msChunks,{type:'audio/webm'});
-      document.getElementById('msDl').classList.add('on');
-      stream.getTracks().forEach(t=>t.stop());
-    };
-    msRecorder.start();
-  }).catch(()=>{document.getElementById('msDl').classList.add('on')});
-}
-
-function msStopRecord(){
-  try{if(msRecorder&&msRecorder.state!=='inactive')msRecorder.stop()}catch(e){}
-}
-
-function msDl(){
-  if(msBlob){
-    const url=URL.createObjectURL(msBlob);
-    const a=document.createElement('a');a.href=url;a.download='ms_hindi_'+Date.now()+'.webm';a.click();
-    URL.revokeObjectURL(url);setStat('ms','Audio download ho gayi! ✓','ok');
+// --- Download ---
+function downloadAudio(){
+  if(blob){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'hindi_voice_' + Date.now() + '.webm';
+    a.click();
+    URL.revokeObjectURL(url);
+    setStat('Audio download ho gayi! ✓', 'ok');
   } else {
-    setStat('ms','Pehle Play karo aur mic allow karo!','err');
+    setStat('Pehle Play karo aur mic allow karo!', 'err');
   }
 }
 </script>
